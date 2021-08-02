@@ -1,0 +1,18 @@
+El deploy del backend tiene algunos problemas y no carga por pantalla los datos mas sin embargo en postman funciona de manera corrrecta 
+En este caso se puede correr el servidor de manera local sin problemas ya que la base de datos esta alojada en la nube
+
+para correr el servidor local usar:
+
+npm install
+
+Luego:
+
+npm start
+
+En el directorio lib dirigirse al directorio services y al archivo note.service.dart
+
+Cambiar esta uri base -> http://192.168.100.5:3000 por http://ip_maquina_fisica:3000
+
+Esta es la ruta del deployment que no vale al momento de llamar el servicio por flutter
+
+https://chesslib.herokuapp.com/
