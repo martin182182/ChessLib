@@ -32,6 +32,8 @@ dependencies:
   flutter_stateless_chessboard: ^0.0.6
   chess: '>=0.6.0 < 0.7.0'
   image_picker: ^0.8.3
+  provider: ^5.0.0
+  shared_preferences: ^2.0.6
 
 dev_dependencies:
   flutter_test:

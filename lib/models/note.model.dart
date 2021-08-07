@@ -1,16 +1,3 @@
-/*
-class NoteM {
-  NoteM(this.jugada,this.descripcion,this.fen,this.gameID);
-  String jugada;
-  String descripcion;
-  String fen;
-  String gameID;
-}
-*/
-// To parse this JSON data, do
-//
-//     final welcome = welcomeFromJson(jsonString);
-
 import 'dart:convert';
 
 NoteM noteMFromJson(String str) => NoteM.fromJson(json.decode(str));
@@ -28,12 +15,6 @@ class NoteM {
     String descripcion;
     String fen;
     int gameID;
-
-    /*Map<String, dynamic> toMap(){
-      return {
-
-      };
-    }*/
 
     factory NoteM.fromJson(Map<String, dynamic> json) => NoteM(
         jugada: json["jugada"],
