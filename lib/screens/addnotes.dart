@@ -42,6 +42,7 @@ class _AddNoteState extends State<AddNote> {
         try{
           note = service.createNotes(_note);
           Navigator.pop(context);
+          setState(() {});
         } on Exception catch(_){
           print('Error al guardar');
           }  

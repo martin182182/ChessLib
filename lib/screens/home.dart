@@ -61,18 +61,22 @@ class _HomeState extends State<Home> {
       new Form(child: Column(children: <Widget>[
           new TextField(
             controller: _nameController,
-            decoration: new InputDecoration(hintText: "Nombre",border: new OutlineInputBorder(
-                  borderSide: new BorderSide(color: Colors.black))),
+            decoration: new InputDecoration(fillColor: Colors.black,hintText: "Nombre",border: new OutlineInputBorder(
+                  borderSide: new BorderSide(color: Colors.black)
+                  ),focusColor: Colors.black),
           ),
-          new FloatingActionButton(onPressed: (){
-            _user = new User(name: _nameController.text);
-            try{
-              userService.createUser(_user);
-              Navigator.pop(context);
-            } on Exception catch(_){
-          print('Error al guardar');
-          } 
-          })
+          new FloatingActionButton(
+            onPressed: (){
+              _user = new User(name: _nameController.text);
+              try{
+                userService.createUser(_user);
+              } on Exception catch(_){
+              print('Error al guardar');
+              } 
+            },
+            child: new Icon(Icons.add_circle,color: currentTheme.isDarkTheme() ? Colors.black:Colors.white),
+            backgroundColor: currentTheme.isDarkTheme() ? Colors.white:Colors.black
+          ),
       ])),
       new Center(
         child: new Column(
@@ -101,6 +105,7 @@ class _HomeState extends State<Home> {
                     if(_pickedFile!=null){
                       imagePath = _pickedFile.path;
                     }
+                    
                   },
                 ),
                 IconButton(
