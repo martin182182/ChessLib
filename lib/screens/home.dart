@@ -6,6 +6,7 @@ import 'package:chess_lib/models/user.model.dart';
 import 'package:chess_lib/providers/theme.provider.dart';
 import 'package:chess_lib/screens/game.dart';
 import 'package:chess_lib/services/game.service.dart';
+import 'package:chess_lib/services/tournament.service.dart';
 import 'package:chess_lib/services/user.service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,6 +24,7 @@ class _HomeState extends State<Home> {
   String imagePath = '';
   Future<List<GameM>> _listGames;
   GameS service = GameS();
+  TournamentS tournamentS = TournamentS();
   @override
   void initState() {
     super.initState();
@@ -121,6 +123,9 @@ class _HomeState extends State<Home> {
                 )
               ]),
               new Text('\nNombre de usuario',style: new TextStyle(fontSize: 30.0,color: currentTheme.isDarkTheme()?Colors.white:Colors.black)),
+              new MaterialButton(onPressed: (){
+                tournamentS.getTournaments();
+              },color: Colors.greenAccent),
               new Text('Informacion adicional',style: new TextStyle(fontSize: 20.0,color: currentTheme.isDarkTheme()?Colors.white:Colors.black)),
               new MaterialButton(onPressed: (){
                 String newTheme = currentTheme.isDarkTheme() ? ThemeM.light : ThemeM.dark;
