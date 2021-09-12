@@ -2,9 +2,11 @@
 import 'dart:io';
 import 'package:chess_lib/models/game.model.dart';
 import 'package:chess_lib/models/theme.model.dart';
+import 'package:chess_lib/models/tournament.model.dart';
 import 'package:chess_lib/models/user.model.dart';
 import 'package:chess_lib/providers/theme.provider.dart';
 import 'package:chess_lib/screens/game.dart';
+import 'package:chess_lib/screens/localization.dart';
 import 'package:chess_lib/services/game.service.dart';
 import 'package:chess_lib/services/tournament.service.dart';
 import 'package:chess_lib/services/user.service.dart';
@@ -23,12 +25,14 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
   String imagePath = '';
   Future<List<GameM>> _listGames;
+  Future<List<TournamentM>> _listTournaments;
   GameS service = GameS();
   TournamentS tournamentS = TournamentS();
   @override
   void initState() {
     super.initState();
     _listGames = service.getGames();
+    _listTournaments = tournamentS.getTournaments();
   }
 
   @override
@@ -123,9 +127,6 @@ class _HomeState extends State<Home> {
                 )
               ]),
               new Text('\nNombre de usuario',style: new TextStyle(fontSize: 30.0,color: currentTheme.isDarkTheme()?Colors.white:Colors.black)),
-              new MaterialButton(onPressed: (){
-                tournamentS.getTournaments();
-              },color: Colors.greenAccent),
               new Text('Informacion adicional',style: new TextStyle(fontSize: 20.0,color: currentTheme.isDarkTheme()?Colors.white:Colors.black)),
               new MaterialButton(onPressed: (){
                 String newTheme = currentTheme.isDarkTheme() ? ThemeM.light : ThemeM.dark;
@@ -137,8 +138,28 @@ class _HomeState extends State<Home> {
               )
             ],
           )
-      )
-
+      ),
+        new Center(
+          child: new ListView(children: <Widget>[
+        new Text('\nTorneos\n\n',
+            style: new TextStyle(fontSize: 30.0,color: currentTheme.isDarkTheme()?Colors.white:Colors.black), textAlign: TextAlign.center),
+        new FutureBuilder(
+          future: _listTournaments,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Column(
+                  mainAxisSize:
+                      MainAxisSize.max, //Arreglar el scroll y evitar overflow
+                  children: _cardTournaments(snapshot.data));
+            } else if (snapshot.hasError) {
+              print(snapshot.error);
+              return Text('Error');
+            }
+            return Center(
+                child: CircularProgressIndicator(color: Colors.black));
+          },
+        )
+      ])),
     ];
     void _onItemTapped(int index) {
       setState(() {
@@ -162,9 +183,11 @@ class _HomeState extends State<Home> {
             new BottomNavigationBarItem(
               icon: new Icon(Icons.login), label: 'Crear perfil'),
             new BottomNavigationBarItem(
-                icon: new Icon(Icons.account_circle), label: 'Perfil')
+                icon: new Icon(Icons.account_circle), label: 'Perfil'),
+            new BottomNavigationBarItem(icon: new Icon(Icons.list), label: 'Torneos')    
           ],
           selectedItemColor: Colors.black,
+          unselectedItemColor: Colors.black38,
           iconSize: 35.0,
           unselectedFontSize: 15.0,
           selectedFontSize: 18.0,
@@ -172,6 +195,31 @@ class _HomeState extends State<Home> {
           onTap: _onItemTapped,
         ));
   }
+//Lista de toneros
+List<Widget> _cardTournaments(data){
+  List<Widget> tournaments = [];
+  for(TournamentM tournament in data){
+    tournaments.add(new Card(
+      child: InkWell(
+        splashColor: Colors.blue.withAlpha(30),
+        onTap: () {
+          Navigator.push(context, new MaterialPageRoute(builder: (context)=>new Localization(tournament)));
+        },
+        child: new SizedBox(
+            width: MediaQuery.of(context).size.width*1,
+            height: 100,
+            child: Center(child: Column(children: <Widget>[
+              new Text(tournament.name),
+              new Text(tournament.city+"-"+tournament.prize),
+              new Text(tournament.description)
+              ])),
+          ),
+        ),
+      )
+    );
+  }
+  return tournaments;
+}
 //Lista de widgets con nombres de la partida
   List<Widget> _btnGames(data) {
     List<Widget> games = [];
